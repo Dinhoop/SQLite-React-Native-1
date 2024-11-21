@@ -5,8 +5,10 @@ import executeQuery from '../DAO/dao';
 
 
 
-export default function App(){   
-    getData();
+export default function App(){
+
+    let result = getData();
+    if(result!=null || result!=[])
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Olá mundo!</Text>
@@ -15,10 +17,18 @@ export default function App(){
 }
 
 async function getData(){
-    let result = await executeQuery(`SELECT * FROM test WHERE id=?`, 2);
-  //let result = await executeQuery(`INSERT INTO test (value, intValue) VALUES ('test1', 123);`);
-    console.log(result); //=> PORQUE ESTE RESULT DÁ UNDEFINED SE LÁ NO DAO ELE IMPRIME O ARRAY COM OS DADOS DE FORMA NORMAL?
-    return result;
+   try{
+    let result = await executeQuery(`SELECT * FROM test WHERE id=?`, 1);
+   // let result = await executeQuery(`INSERT INTO test (value, intValue) VALUES ('test1', 123);`);
+    
+      console.log(result);
+      return result;
+   }
+   catch(error)
+    {
+        console.log("ERRO: ", error.message);
+   }
+   return [];
 }
 
 const styles = StyleSheet.create(

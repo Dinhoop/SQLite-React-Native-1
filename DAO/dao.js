@@ -1,10 +1,12 @@
 import * as SQLite from 'expo-sqlite'; //SQLite
 
 export default async function executeQuery(query, params) {
-  let db=null;
-  let statement =null;
+  let statement;
   try{
-    db = await SQLite.openDatabaseAsync('example.db');
+    const db = await SQLite.openDatabaseAsync('example.db');
+    db.execSync(
+      "CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY NOT NULL, value INTEGER NOT NULL, intValue INTEGER NOY NULL)"
+    );
     console.log("Banco de dados aberto com sucesso");
     try {
       return await db.withTransactionAsync(async (transaction) => {
@@ -14,15 +16,14 @@ export default async function executeQuery(query, params) {
           let rows;
           rows = await db.getAllAsync(query, params);
             console.log(rows);
-            return rows; //retorna o array de objetos json da pesquisa
-          
-          
+            return rows;
+ 
         }
         else{
           try{
             statement = await db.runAsync(query, params);
-           //console.log(statement.changes);
-            return statement; // retorna o numero de linhas afetadas.
+           console.log(statement.changes);
+            return statement;
           }
           catch(error){
             console.log("Erro ao executar comando SQL, Insert, Update, Delete", error.message);  
